@@ -9,6 +9,9 @@ data class Song(
     val singer: String,
     val album: String,
     val title: String,
+    /**
+     * 음악의 길이이며 단위는 초이다.
+     */
     val duration: Int,
     val image: Bitmap,
     val file: String,

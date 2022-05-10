@@ -57,7 +57,7 @@
         app:layout_constraintTop_toBottomOf="@+id/musicAlbumText" />
 
     <ImageButton
-        android:id="@+id/playStopButton"
+        android:id="@+id/play_or_pause_button"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:adjustViewBounds="true"

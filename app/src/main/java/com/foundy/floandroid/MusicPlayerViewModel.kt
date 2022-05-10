@@ -48,10 +48,20 @@ class MusicPlayerViewModel : ViewModel() {
 
     }
 
-    fun stop() {
+    fun pause() {
         if (!hasSong || mediaPlayer == null) return
 
-        mediaPlayer!!.stop()
+        mediaPlayer!!.pause()
         _isPlaying.value = false
+    }
+
+    fun seekTo(milliseconds: Int) {
+        if (!hasSong) return
+
+        mediaPlayer?.seekTo(milliseconds)
+    }
+
+    fun getCurrentProgress(): Int? {
+        return mediaPlayer?.currentPosition
     }
 }
