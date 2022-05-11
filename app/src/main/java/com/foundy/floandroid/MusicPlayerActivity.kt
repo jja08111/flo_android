@@ -29,6 +29,8 @@ class MusicPlayerActivity : AppCompatActivity() {
                 }
             }
         }
+
+        this@MusicPlayerActivity.runOnUiThread(SeekBarRunnable())
     }
 
     private fun onChangedSong(song: Song) {
@@ -52,8 +54,6 @@ class MusicPlayerActivity : AppCompatActivity() {
                     override fun onStartTrackingTouch(seekBar: SeekBar?) {}
                     override fun onStopTrackingTouch(seekBar: SeekBar?) {}
                 })
-
-                this@MusicPlayerActivity.runOnUiThread(SeekBarRunnable())
             }
         }
     }
