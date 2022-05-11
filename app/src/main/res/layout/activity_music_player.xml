@@ -23,7 +23,7 @@
         android:layout_height="300dp"
         android:contentDescription="Song"
         android:scaleType="centerCrop"
-        app:layout_constraintBottom_toBottomOf="@+id/play_or_pause_button"
+        app:layout_constraintBottom_toBottomOf="@+id/musicSeekBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
