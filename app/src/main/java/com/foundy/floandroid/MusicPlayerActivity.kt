@@ -55,6 +55,7 @@ class MusicPlayerActivity : AppCompatActivity() {
                     override fun onStopTrackingTouch(seekBar: SeekBar?) {}
                 })
             }
+            nextLyricsText.text = viewModel.getNextLyricsAt(0)
         }
     }
 
@@ -75,11 +76,11 @@ class MusicPlayerActivity : AppCompatActivity() {
     inner class SeekBarRunnable : Runnable {
         override fun run() {
             val currentProgressMilli = viewModel.getCurrentProgress()
-            if (currentProgressMilli != null) {
+            if (currentProgressMilli != null && viewModel.isPlaying.value == true) {
                 binding.apply {
                     musicSeekBar.progress = currentProgressMilli
-                    if (viewModel.isPlaying.value == true)
-                        hightlightLyricsText.text = viewModel.getLyricsAt(currentProgressMilli)
+                    hightlightLyricsText.text = viewModel.getLyricsAt(currentProgressMilli)
+                    nextLyricsText.text = viewModel.getNextLyricsAt(currentProgressMilli)
                 }
             }
 

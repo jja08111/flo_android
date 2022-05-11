@@ -76,4 +76,16 @@ class MusicPlayerViewModel : ViewModel() {
             null
         }
     }
+
+    fun getNextLyricsAt(milliseconds: Int): String? {
+        if (!hasSong) return null
+
+        return try {
+            song.value!!.lyrics.timeLyricsPairs.first {
+                milliseconds < it.first
+            }.second
+        } catch (e: NoSuchElementException) {
+            null
+        }
+    }
 }
