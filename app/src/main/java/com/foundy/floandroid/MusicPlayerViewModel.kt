@@ -64,4 +64,16 @@ class MusicPlayerViewModel : ViewModel() {
     fun getCurrentProgress(): Int? {
         return mediaPlayer?.currentPosition
     }
+
+    fun getLyricsAt(milliseconds: Int): String? {
+        if (!hasSong) return null
+
+        return try {
+            song.value!!.lyrics.timeLyricsPairs.last {
+                milliseconds >= it.first
+            }.second
+        } catch (e: NoSuchElementException) {
+            null
+        }
+    }
 }

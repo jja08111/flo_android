@@ -74,10 +74,16 @@ class MusicPlayerActivity : AppCompatActivity() {
 
     inner class SeekBarRunnable : Runnable {
         override fun run() {
-            val currentProgress = viewModel.getCurrentProgress()
-            if (currentProgress != null)
-                binding.musicSeekBar.progress = currentProgress
-            Handler(Looper.getMainLooper()).postDelayed(this@SeekBarRunnable, 500)
+            val currentProgressMilli = viewModel.getCurrentProgress()
+            if (currentProgressMilli != null) {
+                binding.apply {
+                    musicSeekBar.progress = currentProgressMilli
+                    if (viewModel.isPlaying.value == true)
+                        hightlightLyricsText.text = viewModel.getLyricsAt(currentProgressMilli)
+                }
+            }
+
+            Handler(Looper.getMainLooper()).postDelayed(this@SeekBarRunnable, 200)
         }
     }
 }
