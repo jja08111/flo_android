@@ -10,12 +10,11 @@ import com.foundy.floandroid.databinding.ActivityMusicPlayerBinding
 import com.foundy.floandroid.model.Song
 
 class MusicPlayerActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMusicPlayerBinding
+    private val binding by lazy { ActivityMusicPlayerBinding.inflate(layoutInflater) }
     private val viewModel by viewModels<MusicPlayerViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMusicPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         viewModel.song.observe(this) {
