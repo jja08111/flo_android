@@ -19,7 +19,7 @@ class MusicPlayerActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         viewModel.song.observe(this) {
-            onSongChanged(it)
+            onChangedSong(it)
         }
         viewModel.isPlaying.observe(this) { isPlaying ->
             binding.apply {
@@ -32,7 +32,7 @@ class MusicPlayerActivity : AppCompatActivity() {
         }
     }
 
-    private fun onSongChanged(song: Song) {
+    private fun onChangedSong(song: Song) {
         binding.apply {
             albumCoverImage.setImageBitmap(song.image)
             musicTitleText.text = song.title
@@ -75,10 +75,10 @@ class MusicPlayerActivity : AppCompatActivity() {
 
     inner class SeekBarRunnable : Runnable {
         override fun run() {
-            Handler(Looper.getMainLooper()).postDelayed(this@SeekBarRunnable, 1000)
             val currentProgress = viewModel.getCurrentProgress()
             if (currentProgress != null)
                 binding.musicSeekBar.progress = currentProgress
+            Handler(Looper.getMainLooper()).postDelayed(this@SeekBarRunnable, 500)
         }
     }
 }
