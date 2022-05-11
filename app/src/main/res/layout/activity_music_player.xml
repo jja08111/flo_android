@@ -6,47 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".MusicPlayerActivity">
 
-    <TextView
-        android:id="@+id/musicTitleText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/musicSingerText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:text="제목" />
-
-    <ImageView
-        android:id="@+id/albumCoverImage"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:contentDescription="Song"
-        android:scaleType="centerCrop"
-        app:layout_constraintBottom_toBottomOf="@+id/musicSeekBar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/musicSingerText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/albumCoverImage"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="가수" />
-
-    <TextView
-        android:id="@+id/musicAlbumText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/musicSingerText"
-        tools:text="앨범이름" />
 
     <SeekBar
         android:id="@+id/musicSeekBar"
@@ -63,7 +22,7 @@
         android:id="@+id/play_or_pause_button"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="16dp"
         android:adjustViewBounds="true"
         android:background="@null"
         android:scaleType="fitCenter"
@@ -71,25 +30,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/hightlightLyricsText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:textSize="16sp"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragmentContainerView"
+        android:name="com.foundy.floandroid.SongInfoFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/musicSeekBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/albumCoverImage"
-        tools:text="하이라이트 가사" />
-
-    <TextView
-        android:id="@+id/nextLyricsText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        tools:text="다음 가사"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hightlightLyricsText" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

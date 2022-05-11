@@ -30,32 +30,25 @@ class MusicPlayerActivity : AppCompatActivity() {
             }
         }
 
-        this@MusicPlayerActivity.runOnUiThread(SeekBarRunnable())
+        this.runOnUiThread(SeekBarRunnable())
     }
 
     private fun onChangedSong(song: Song) {
-        binding.apply {
-            albumCoverImage.setImageBitmap(song.image)
-            musicTitleText.text = song.title
-            musicSingerText.text = song.singer
-            musicAlbumText.text = song.album
-            musicSeekBar.apply {
-                max = song.duration * 1000
-                setOnSeekBarChangeListener(object :
-                    SeekBar.OnSeekBarChangeListener {
-                    override fun onProgressChanged(
-                        seekBar: SeekBar?,
-                        progress: Int,
-                        fromUser: Boolean
-                    ) {
-                        if (fromUser) viewModel.seekTo(progress)
-                    }
+        binding.musicSeekBar.apply {
+            max = song.duration * 1000
+            setOnSeekBarChangeListener(object :
+                SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(
+                    seekBar: SeekBar?,
+                    progress: Int,
+                    fromUser: Boolean
+                ) {
+                    if (fromUser) viewModel.seekTo(progress)
+                }
 
-                    override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-                    override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-                })
-            }
-            nextLyricsText.text = viewModel.getNextLyricsAt(0)
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+                override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+            })
         }
     }
 
@@ -77,11 +70,7 @@ class MusicPlayerActivity : AppCompatActivity() {
         override fun run() {
             val currentProgressMilli = viewModel.getCurrentProgress()
             if (currentProgressMilli != null && viewModel.isPlaying.value == true) {
-                binding.apply {
-                    musicSeekBar.progress = currentProgressMilli
-                    hightlightLyricsText.text = viewModel.getLyricsAt(currentProgressMilli)
-                    nextLyricsText.text = viewModel.getNextLyricsAt(currentProgressMilli)
-                }
+                binding.musicSeekBar.progress = currentProgressMilli
             }
 
             Handler(Looper.getMainLooper()).postDelayed(this@SeekBarRunnable, 200)
