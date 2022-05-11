@@ -29,7 +29,7 @@ class MusicPlayerViewModel : ViewModel() {
     init {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                val song = repository.getSong()
+                val song = repository.getSong() ?: return@withContext
                 _song.postValue(song)
             }
         }
