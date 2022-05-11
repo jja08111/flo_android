@@ -13,6 +13,8 @@ import com.foundy.floandroid.model.Song
 class SongInfoFragment : Fragment(R.layout.fragment_song_info) {
     private lateinit var binding: FragmentSongInfoBinding
     private val viewModel by activityViewModels<MusicPlayerViewModel>()
+    private var runnable : LyricsRunnable? = null
+    private var handler : Handler? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -27,7 +29,13 @@ class SongInfoFragment : Fragment(R.layout.fragment_song_info) {
             onChangedSong(it)
         }
 
-        activity?.runOnUiThread(LyricsRunnable())
+        runnable = LyricsRunnable()
+        activity?.runOnUiThread(runnable)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setLyricsTexts()
     }
 
     private fun onChangedSong(song: Song) {
@@ -42,19 +50,29 @@ class SongInfoFragment : Fragment(R.layout.fragment_song_info) {
 
     inner class LyricsRunnable : Runnable {
         override fun run() {
-            val currentProgressMilli = viewModel.getCurrentProgress()
-            if (currentProgressMilli != null && viewModel.isPlaying.value == true) {
-                binding.apply {
-                    hightlightLyricsText.text = viewModel.getLyricsAt(currentProgressMilli)
-                    nextLyricsText.text = viewModel.getNextLyricsAt(currentProgressMilli)
-                }
-            }
+            setLyricsTexts()
+            handler = Handler(Looper.getMainLooper())
+            handler!!.postDelayed(this@LyricsRunnable, 200)
+        }
+    }
 
-            Handler(Looper.getMainLooper()).postDelayed(this@LyricsRunnable, 200)
+    private fun setLyricsTexts() {
+        binding.apply {
+            val currentProgressMilli = viewModel.getCurrentProgress()
+
+            hightlightLyricsText.text = viewModel.getLyricsAt(currentProgressMilli)
+            nextLyricsText.text = viewModel.getNextLyricsAt(currentProgressMilli)
         }
     }
 
     private fun navigateToLyrics() {
         findNavController().navigate(R.id.action_songInfoFragment_to_lyricsFragment)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (handler != null && runnable != null) {
+            handler!!.removeCallbacks(runnable!!)
+        }
     }
 }

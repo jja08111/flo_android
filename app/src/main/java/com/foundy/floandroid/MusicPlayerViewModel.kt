@@ -1,8 +1,6 @@
 package com.foundy.floandroid
 
-import android.content.Context
 import android.media.MediaPlayer
-import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -31,18 +29,19 @@ class MusicPlayerViewModel : ViewModel() {
             withContext(Dispatchers.IO) {
                 val song = repository.getSong() ?: return@withContext
                 _song.postValue(song)
+                mediaPlayer = MediaPlayer().apply {
+                    setDataSource(song.file)
+                    prepare()
+                }
             }
         }
     }
 
     private val hasSong get() = _song.value != null
 
-    fun play(context: Context) {
+    fun play() {
         if (!hasSong) return
 
-        if (mediaPlayer == null) {
-            mediaPlayer = MediaPlayer.create(context, Uri.parse(song.value!!.file))
-        }
         mediaPlayer!!.start()
         _isPlaying.value = true
 
@@ -61,8 +60,8 @@ class MusicPlayerViewModel : ViewModel() {
         mediaPlayer?.seekTo(milliseconds)
     }
 
-    fun getCurrentProgress(): Int? {
-        return mediaPlayer?.currentPosition
+    fun getCurrentProgress(): Int {
+        return mediaPlayer?.currentPosition ?: 0
     }
 
     fun getLyricsAt(milliseconds: Int): String? {
