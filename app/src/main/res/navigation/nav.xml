@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav"
+    app:startDestination="@id/songInfoFragment">
+
+    <fragment
+        android:id="@+id/songInfoFragment"
+        android:name="com.foundy.floandroid.SongInfoFragment"
+        android:label="fragment_song_info"
+        tools:layout="@layout/fragment_song_info" >
+        <action
+            android:id="@+id/action_songInfoFragment_to_lyricsFragment"
+            app:destination="@id/lyricsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/lyricsFragment"
+        android:name="com.foundy.floandroid.LyricsFragment"
+        android:label="LyricsFragment" >
+        <action
+            android:id="@+id/action_lyricsFragment_to_songInfoFragment"
+            app:destination="@id/songInfoFragment"
+            app:popUpTo="@id/songInfoFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+</navigation>
