@@ -8,7 +8,6 @@
     <fragment
         android:id="@+id/songInfoFragment"
         android:name="com.foundy.floandroid.SongInfoFragment"
-        android:label="fragment_song_info"
         tools:layout="@layout/fragment_song_info" >
         <action
             android:id="@+id/action_songInfoFragment_to_lyricsFragment"
@@ -16,8 +15,7 @@
     </fragment>
     <fragment
         android:id="@+id/lyricsFragment"
-        android:name="com.foundy.floandroid.LyricsFragment"
-        android:label="LyricsFragment" >
+        android:name="com.foundy.floandroid.LyricsFragment">
         <action
             android:id="@+id/action_lyricsFragment_to_songInfoFragment"
             app:destination="@id/songInfoFragment"

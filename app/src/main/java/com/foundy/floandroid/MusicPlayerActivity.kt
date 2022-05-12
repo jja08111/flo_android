@@ -6,6 +6,10 @@ import android.os.Handler
 import android.os.Looper
 import android.widget.SeekBar
 import androidx.activity.viewModels
+import androidx.appcompat.widget.Toolbar
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import com.foundy.floandroid.databinding.ActivityMusicPlayerBinding
 import com.foundy.floandroid.model.Song
 
@@ -32,8 +36,21 @@ class MusicPlayerActivity : AppCompatActivity() {
             }
         }
 
+        setupActionBar()
+
         runnable = SeekBarRunnable()
         this.runOnUiThread(runnable)
+    }
+
+    private fun setupActionBar() {
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
+        val navController = navHostFragment.navController
+        val appBarConfiguration = AppBarConfiguration(navController.graph)
+        findViewById<Toolbar>(R.id.toolbar).setupWithNavController(
+            navController,
+            appBarConfiguration
+        )
     }
 
     private fun onChangedSong(song: Song) {
