@@ -13,7 +13,14 @@ class LyricsAdapter(private val viewModel: MusicPlayerViewModel) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun setContents(position: Int) {
-            binding.lyricsItem.text = viewModel.song.value!!.lyrics.timeLyricsPairs[position].second
+            binding.lyricsItem.apply {
+                val timeLyricsPair = viewModel.song.value!!.lyrics.timeLyricsPairs[position]
+
+                text = timeLyricsPair.second
+                setOnClickListener {
+                    viewModel.seekTo(timeLyricsPair.first)
+                }
+            }
         }
     }
 
