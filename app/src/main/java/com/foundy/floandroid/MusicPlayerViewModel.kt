@@ -35,7 +35,7 @@ class MusicPlayerViewModel : ViewModel() {
     private var handler: Handler? = null
 
     var activeLyricsSeeking = false
-    var visibleLyricsSeekingButton = MutableLiveData(false)
+    val visibleLyricsSeekingButton = MutableLiveData(false)
 
     init {
         viewModelScope.launch {
