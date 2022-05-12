@@ -92,6 +92,14 @@ class MusicPlayerViewModel : ViewModel() {
         mediaPlayer?.seekTo(milliseconds)
     }
 
+    fun getCurrentLyricsIndexAt(milliseconds: Int): Int {
+        if (!hasSong) return -1
+
+        return song.value!!.lyrics.timeLyricsPairs.indexOfLast {
+            milliseconds >= it.first
+        }
+    }
+
     fun getLyricsAt(milliseconds: Int): String? {
         if (!hasSong) return null
 
