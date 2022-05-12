@@ -2,8 +2,6 @@ package com.foundy.floandroid
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.widget.SeekBar
 import androidx.activity.viewModels
 import androidx.appcompat.widget.Toolbar
@@ -16,8 +14,6 @@ import com.foundy.floandroid.model.Song
 class MusicPlayerActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMusicPlayerBinding.inflate(layoutInflater) }
     private val viewModel by viewModels<MusicPlayerViewModel>()
-    private var runnable: SeekBarRunnable? = null
-    private var handler: Handler? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,11 +31,11 @@ class MusicPlayerActivity : AppCompatActivity() {
                 }
             }
         }
+        viewModel.musicProgressMilli.observe(this) { progress ->
+            binding.musicSeekBar.progress = progress
+        }
 
         setupActionBar()
-
-        runnable = SeekBarRunnable()
-        this.runOnUiThread(runnable)
     }
 
     private fun setupActionBar() {
@@ -83,23 +79,6 @@ class MusicPlayerActivity : AppCompatActivity() {
         binding.playOrPauseButton.apply {
             setImageResource(R.drawable.ic_baseline_pause_24)
             setOnClickListener { viewModel.pause() }
-        }
-    }
-
-    inner class SeekBarRunnable : Runnable {
-        override fun run() {
-            val currentProgressMilli = viewModel.getCurrentProgress()
-            binding.musicSeekBar.progress = currentProgressMilli
-
-            handler = Handler(Looper.getMainLooper())
-            handler!!.postDelayed(this@SeekBarRunnable, 200)
-        }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        if (handler != null && runnable != null) {
-            handler!!.removeCallbacks(runnable!!)
         }
     }
 }

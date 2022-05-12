@@ -1,6 +1,8 @@
 package com.foundy.floandroid
 
 import android.media.MediaPlayer
+import android.os.Handler
+import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,6 +12,7 @@ import com.foundy.floandroid.repository.SongRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.NoSuchElementException
 
 class MusicPlayerViewModel : ViewModel() {
     private val repository = SongRepository()
@@ -24,6 +27,13 @@ class MusicPlayerViewModel : ViewModel() {
     val isPlaying: LiveData<Boolean>
         get() = _isPlaying
 
+    private val _musicProgressMilli = MutableLiveData(0)
+    val musicProgressMilli: LiveData<Int>
+        get() = _musicProgressMilli
+
+    private var runnable: ProgressRunnable? = null
+    private var handler: Handler? = null
+
     init {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
@@ -33,11 +43,32 @@ class MusicPlayerViewModel : ViewModel() {
                     setDataSource(song.file)
                     prepare()
                 }
+                startHandlerLoop()
             }
         }
     }
 
     private val hasSong get() = _song.value != null
+
+    private fun startHandlerLoop() {
+        runnable = ProgressRunnable()
+        handler = Handler(Looper.getMainLooper())
+        handler!!.post(runnable!!)
+    }
+
+    private fun stopHandlerLoop() {
+        if (runnable != null)
+            handler?.removeCallbacks(runnable!!)
+    }
+
+    private inner class ProgressRunnable : Runnable {
+        override fun run() {
+            if (isPlaying.value == true) {
+                _musicProgressMilli.value = mediaPlayer?.currentPosition ?: 0
+            }
+            handler?.postDelayed(this, 500)
+        }
+    }
 
     fun play() {
         if (!hasSong) return
@@ -57,11 +88,8 @@ class MusicPlayerViewModel : ViewModel() {
     fun seekTo(milliseconds: Int) {
         if (!hasSong) return
 
+        _musicProgressMilli.value = milliseconds
         mediaPlayer?.seekTo(milliseconds)
-    }
-
-    fun getCurrentProgress(): Int {
-        return mediaPlayer?.currentPosition ?: 0
     }
 
     fun getLyricsAt(milliseconds: Int): String? {
@@ -86,5 +114,9 @@ class MusicPlayerViewModel : ViewModel() {
         } catch (e: NoSuchElementException) {
             null
         }
+    }
+
+    override fun onCleared() {
+        stopHandlerLoop()
     }
 }
