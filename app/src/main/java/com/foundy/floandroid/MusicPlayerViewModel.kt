@@ -34,6 +34,9 @@ class MusicPlayerViewModel : ViewModel() {
     private var runnable: ProgressRunnable? = null
     private var handler: Handler? = null
 
+    var activeLyricsSeeking = false
+    var visibleLyricsSeekingButton = MutableLiveData(false)
+
     init {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {

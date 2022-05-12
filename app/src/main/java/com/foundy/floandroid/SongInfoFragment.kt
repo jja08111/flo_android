@@ -27,6 +27,7 @@ class SongInfoFragment : Fragment(R.layout.fragment_song_info) {
         viewModel.musicProgressMilli.observe(viewLifecycleOwner) {
             setLyricsTexts(it)
         }
+        viewModel.visibleLyricsSeekingButton.value = false
     }
 
     override fun onResume() {

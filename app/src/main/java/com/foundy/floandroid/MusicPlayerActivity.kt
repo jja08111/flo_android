@@ -1,10 +1,13 @@
 package com.foundy.floandroid
 
+import android.content.res.ColorStateList
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ImageButton
 import android.widget.SeekBar
 import androidx.activity.viewModels
-import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -34,8 +37,21 @@ class MusicPlayerActivity : AppCompatActivity() {
         viewModel.musicProgressMilli.observe(this) { progress ->
             binding.musicSeekBar.progress = progress
         }
+        viewModel.visibleLyricsSeekingButton.observe(this) { isVisible ->
+            binding.lyricsSeekButton.isVisible = isVisible
+        }
 
         setupActionBar()
+        binding.lyricsSeekButton.setOnClickListener {
+            viewModel.activeLyricsSeeking = !viewModel.activeLyricsSeeking
+            (it as ImageButton).imageTintList =
+                ColorStateList.valueOf(
+                    ContextCompat.getColor(
+                        this,
+                        if (viewModel.activeLyricsSeeking) R.color.purple_500 else R.color.gray
+                    )
+                )
+        }
     }
 
     private fun setupActionBar() {
@@ -43,7 +59,7 @@ class MusicPlayerActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
         val navController = navHostFragment.navController
         val appBarConfiguration = AppBarConfiguration(navController.graph)
-        findViewById<Toolbar>(R.id.toolbar).setupWithNavController(
+        binding.toolbar.setupWithNavController(
             navController,
             appBarConfiguration
         )

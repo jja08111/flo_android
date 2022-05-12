@@ -3,10 +3,14 @@ package com.foundy.floandroid
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
+import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.foundy.floandroid.databinding.LyricsItemLayoutBinding
 
-class LyricsAdapter(private val viewModel: MusicPlayerViewModel) :
+class LyricsAdapter(
+    private val viewModel: MusicPlayerViewModel,
+    private val navController: NavController
+) :
     RecyclerView.Adapter<LyricsAdapter.ViewHolder>() {
 
     inner class ViewHolder(val binding: LyricsItemLayoutBinding) :
@@ -18,7 +22,11 @@ class LyricsAdapter(private val viewModel: MusicPlayerViewModel) :
 
                 text = timeLyricsPair.second
                 setOnClickListener {
-                    viewModel.seekTo(timeLyricsPair.first)
+                    if (viewModel.activeLyricsSeeking) {
+                        viewModel.seekTo(timeLyricsPair.first)
+                    } else {
+                        navController.navigateUp()
+                    }
                 }
             }
         }
